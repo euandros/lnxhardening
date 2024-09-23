@@ -1,5 +1,5 @@
 #!/bin/bash
- 
+
 # Nome: LNXHardening
 # Descrição: Script de automação para aplicação de hardening de servidores linux
 # seja para as distribuições da família RHEL ou distribuições baseadas em Debian.
@@ -7,10 +7,27 @@
 # Sistemas suportados/testados: CentOS 8, RHEL 8, Ubuntu 22.04 e Debian 11.
 # Autor: Evandro Santos
 # Contato: evandro.santos@tutanota.com
-# Data: Segunda-feira, 22 de setemnbro de 2024, São Paulo.
+# Data: Segunda-feira, 22 de setembro de 2024, São Paulo.
 # Versão: 1.0
- 
-# Função para o script de hardening CentOS
+
+# Função para exibir ASCII art e informações do menu
+show_menu() {
+  clear
+  echo "==================================================="
+  echo "LNX Hardening - Script de Automação para Servidores"
+  echo "==================================================="
+  echo "Usuário: $(whoami)"
+  echo "Data e Hora de Execução: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "==================================================="
+  echo "Escolha a opção de hardening:"
+  echo ""
+  echo "1. Aplicar Hardening no CentOS/RHEL"
+  echo "2. Aplicar Hardening no Ubuntu/Debian"
+  echo "3. Sair"
+  echo "==================================================="
+}
+
+# Função para o script de hardening CentOS/RHEL
 harden_centos_rhel() {
   echo "Aplicando o Hardening ao Sistema Linux CentOS/RHEL..."
  
@@ -235,11 +252,11 @@ harden_centos_rhel() {
   echo -e "\e[32mFortalecimento completo!\e[0m"
  
 }
- 
+
 # Função para o script de hardening Ubuntu/Debian
 harden_ubuntu_debian() {
     echo "Aplicando o Hardening ao Sistema Linux Ubuntu/Debian..."
-  # Passo 1: Documentar as informações do host
+    # Passo 1: Documentar as informações do host
     echo -e "\e[33mPasso 1: Documentando as informações do host\e[0m"
     echo "Hostname: $(hostname)"
     echo "Versão do Kernel: $(uname -r)"
@@ -325,7 +342,7 @@ harden_ubuntu_debian() {
       echo "O SELinux já está instalado"
     else
       echo "O SELinux não está instalado, instalando agora..."
-      sudo apt-get install selinux-utils selinux-basics -y
+      sudo apt-get install policycoreutils selinux-utils selinux-basics -y
     fi
     echo "Ativando o SELinux..."
     sudo selinux-activate
@@ -481,35 +498,16 @@ harden_ubuntu_debian() {
     echo ""
  
     echo -e "\e[32mFortificação concluída!\e[0m"
- 
-  }
- 
-# Função para exibir o menu
-show_menu() {
-  echo "Escolha uma opção:"
-  echo "1. Hardening CentOS/RHEL"
-  echo "2. Hardening Ubuntu/Debian"
-  echo "3. Sair"
 }
- 
-# Loop principal do menu
+
+# Menu principal
 while true; do
   show_menu
-  read -p "Digite sua escolha (1/2/3): " choice
- 
-  case $choice in
-    1)
-      harden_centos_rhel
-      ;;
-    2)
-      harden_ubuntu_debian
-      ;;
-    3)
-      echo "Saindo..."
-      exit 0
-      ;;
-    *)
-      echo "Escolha inválida. Por favor, digite 1, 2 ou 3."
-      ;;
+  read -p "Digite sua opção [1-3]: " option
+  case $option in
+    1) harden_centos_rhel ;;
+    2) harden_ubuntu_debian ;;
+    3) echo "Saindo..."; exit 0 ;;
+    *) echo "Opção inválida, tente novamente." ;;
   esac
 done
